@@ -8,15 +8,21 @@ import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
  */
 public class TitleScreen extends World
 {
+    private GreenfootImage title;
+    private int titleWidth;
     
     /**
      * Constructor for objects of class TitleScreen.
      * 
      */
     public TitleScreen()
-    {    
+    {   
         // Create a new world with 600x400 cells with a cell size of 1x1 pixels.
         super(600, 400, 1); 
+        title = new GreenfootImage("titlepage1.jpg");
+        titleWidth = title.getWidth();
+        setBackground(title);
+        title.scale(600, 400);
         prepare();    
     }
     
@@ -38,9 +44,9 @@ public class TitleScreen extends World
      */
     private void prepare()
     {
-        Label label = new Label("Use \u2091 to move", 40);
+        Label label = new Label("Use ↑ ↓ → ← to move", 40);
         addObject(label, 200, 257);
-        label.setLocation(293, 243);
+        label.setLocation(293, 300);
     }
 }
 
