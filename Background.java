@@ -21,19 +21,5 @@ public class Background extends Actor
         this.image.scale(600, 400);
         setImage(image);
     }
-    
-    public void act()
-    {
-        // Add your action code here.
-        scroll();
-    }
-    
-    public void scroll()
-    {
-        if (getY() >= getWorld().getHeight() + getImage().getHeight() / 2) 
-        {
-            setLocation(getX(), getY() - getImage().getHeight() * 2);
-        }
-        setLocation (getX(), getY() + 1);        
-    }
+
 }
