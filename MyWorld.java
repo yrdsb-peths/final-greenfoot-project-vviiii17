@@ -10,6 +10,7 @@ public class MyWorld extends World
 {
     Background bg1 = new Background("background1.jpg");
     Background bg2 = new Background("background2.jpg");
+    private String[] carImages = {"car1.png","car2.png","car3.png","car4.png","car5.png","car6.png","car7.png","car8.png"};
     
     /**
      * Constructor for objects of class MyWorld.
@@ -38,20 +39,4 @@ public class MyWorld extends World
 }
 
 
-// public class ScrollingWorld extends World
-// {
-    // Background bg1 = new Background();
-    // Background bg2 = new Background();
-    
-    // public ScrollingWorld()
-    // {    
-        // super(600, 400, 1, false); 
 
-        // bg1.setOtherBackground(bg2);
-        // bg2.setOtherBackground(bg1);
-
-        // addObject(bg1, 0, 200);
-        // addObject(bg2, 1024, 200);
-    // }
-
-// }
