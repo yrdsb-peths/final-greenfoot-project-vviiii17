@@ -17,19 +17,36 @@ public class Vehicle extends Actor
      * the 'Act' or 'Run' button gets pressed in the environment.
      */
     
-    public Vehicle(int speedHorizontal, int speedVertical, String[]carImages)
+    public Vehicle(int speedHorizontal, int speedVertical, String[] carImages)
     {
         this.speedHorizontal = speedHorizontal;
         this.speedVertical = speedVertical;
-        Random rand = new Random();
-        int index = rand.nextInt(carImages.length);
-        setImage(carImages[index]);
+        GreenfootImage img = selectRandomImage(carImages);
+        img.scale(200, 100);
+        setImage(img);
+    }
+    
+    private GreenfootImage selectRandomImage(String[] carImages)
+    {
+        int index = Greenfoot.getRandomNumber(carImages.length);
+        return new GreenfootImage(carImages[index]);
     }
     
     public void act()
     {
-        // Add your action code here.
+        move(speedHorizontal);
         
+        // move along with the background vertically
+        setLocation(getX(), getY() + speedVertical);
+        
+        if(getX() > getWorld().getWidth())
+        {
+            setLocation(0, getY());
+        }
+        else if(getX() < 0)
+        {
+            setLocation(getWorld().getWidth(),getY());
+        }
     }
 
     

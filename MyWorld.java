@@ -10,6 +10,8 @@ public class MyWorld extends World
 {
     Background bg1 = new Background("background1.jpg");
     Background bg2 = new Background("background2.jpg");
+    private static final int carNum = 8;
+    private static int speedVertical = 1;
     private String[] carImages = {"car1.png","car2.png","car3.png","car4.png","car5.png","car6.png","car7.png","car8.png"};
     
     /**
@@ -17,7 +19,7 @@ public class MyWorld extends World
      * 
      */
     public MyWorld()
-    {    
+    {   
         // Create a new world with 600x400 cells with a cell size of 1x1 pixels.
         super(600, 400, 1, false);
         Greenfoot.start(); // Start the Greenfoot environment
@@ -28,7 +30,22 @@ public class MyWorld extends World
         // Set each backrgound to know about the other
         bg1.setOtherBackground(bg2);
         bg2.setOtherBackground(bg1);
+        
+        // Add cars
+        for(int i = 0; i < carNum; i++)
+        {
+            addCar();
+        }
 
+    }
+    
+    private void addCar()
+    {
+        // random horizontal speed
+        int speedHorizontal = Greenfoot.getRandomNumber(3) + 2; 
+        Vehicle car = new Vehicle(speedHorizontal, speedVertical, carImages);
+        int positionY = Greenfoot.getRandomNumber(getHeight());
+        addObject(car, Greenfoot.getRandomNumber(getWidth()), positionY);
     }
     
     public void act()
