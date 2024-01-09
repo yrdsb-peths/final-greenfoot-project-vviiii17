@@ -14,9 +14,9 @@ public class MyWorld extends World
     private static int speedHorizontal = 2; 
     private String[] carImages = {"car1.png","car2.png","car3.png","car4.png","car5.png","car6.png"};
     private int carCounter = 0;
-    private int lastPosition = 0;
-    private static int verticalSpacing = 100;
-    private static int delay  = 100;
+    private int lastYPosition = 0;
+    private static int verticalSpacing = 70;
+    private static int delay  = 150;
     
     /**
      * Constructor for objects of class MyWorld.
@@ -50,23 +50,21 @@ public class MyWorld extends World
     private void addCar()
     {
         Vehicle car = new Vehicle(speedHorizontal, speedVertical, carImages);
-        int yPosition = Greenfoot.getRandomNumber(getHeight());
+        int yPosition = getNextYPosition();
         
         // all cars start at the leftmost of the screen
         addObject(car, 0, yPosition);  
     }
     
-    private int yPos()
+    private int getNextYPosition()
     {
-        int yPos = lastPosition + verticalSpacing;
-        if(yPos > getHeight())
+        lastYPosition += verticalSpacing;
+        if(lastYPosition >= getHeight())
         {
-            yPos = 0;
+            lastYPosition = 0;
         }
-        lastPosition = yPos;
-        return yPos;
+        return lastYPosition;
     }
-    
     
 }
 
