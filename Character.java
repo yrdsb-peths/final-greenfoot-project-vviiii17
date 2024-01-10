@@ -8,23 +8,48 @@ import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
  */
 public class Character extends Actor
 {
-    GreenfootImage[] idleFront = new GreenfootImage[4];
-    GreenfootImage[] idleRight = new GreenfootImage[4];
-    GreenfootImage[] idleLeft = new GreenfootImage[4];
+    GreenfootImage[] idleFront = new GreenfootImage[3];
+    GreenfootSound carCrashing = new GreenfootSound("crashing.mp3");
     
+    // Direction the character is facing
+    String facing = "front";
+    SimpleTimer animationTimer = new SimpleTimer();
     // Speed the charater moves at
     int speed = 2;
+    int imageIndex = 0;
     
     /**
      * Constructor - The code that gets run on time when object is created
      */
     public Character()
-    {
-        for(int i = 0; i < idleRight.length; i++)
+    {  
+        for(int i = 0; i < 3; i++)
         {
-            idleRight[i] = new GreenfootImage("images/right" + i + ".png");
-            idleRight[i].scale(100,100);
+            idleFront[i] = new GreenfootImage("character" + i + ".png");
+            idleFront[i].scale(50, 50);
         }
+        
+        animationTimer.mark();
+        
+        // Set the initial character image to be the front image
+        setImage(idleFront[0]);
+    }
+    
+    public void animateCharacter()
+    {
+        if(animationTimer.millisElapsed() < 100)
+        {
+            return;
+        }
+        animationTimer.mark();
+        
+        if(facing.equals("front"))
+        {
+            // update animation images
+            setImage(idleFront[imageIndex]); 
+            imageIndex = (imageIndex + 1) % idleFront.length;
+        
+        }   
     }
     
     /**
@@ -33,6 +58,34 @@ public class Character extends Actor
      */
     public void act()
     {
-        // Add your action code here.
+        // press keys
+        if(Greenfoot.isKeyDown("left"))
+        {
+            move(-speed);
+        }
+        
+        else if(Greenfoot.isKeyDown("right"))
+        {
+            move(speed);
+        }
+        
+        else if(Greenfoot.isKeyDown("up"))
+        {
+            setLocation(getX(), getY() - speed);
+            facing = "front";
+        }
+        
+        // crash on cars
+        if(isTouching(Vehicle.class))
+        {
+            MyWorld world = (MyWorld) getWorld();
+            world.hpDecrease();
+            carCrashing.play();
+        }
+        
+        animateCharacter();
+        
     }
+    
+
 }

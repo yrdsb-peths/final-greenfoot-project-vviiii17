@@ -17,6 +17,8 @@ public class MyWorld extends World
     private int lastYPosition = 0;
     private static int verticalSpacing = 70;
     private static int delay  = 150;
+    int hp = 3;
+    Label hpLevel = new Label("hp: " + hp, 50);
     
     /**
      * Constructor for objects of class MyWorld.
@@ -34,6 +36,9 @@ public class MyWorld extends World
         // Set each backrgound to know about the other
         bg1.setOtherBackground(bg2);
         bg2.setOtherBackground(bg1);
+        
+        Character character = new Character();
+        addObject(character, 300, 200);
     }
     
     public void act()
@@ -66,6 +71,28 @@ public class MyWorld extends World
         return lastYPosition;
     }
     
+    public void hpDecrease()
+    {
+        hp--;
+        hpLevel.setValue("hp: " + hp);
+        
+        if(hp == 0)
+        {
+            gameOver();
+        }
+    }
+    
+    /**
+     * End the game and draw 'Game Over'
+     */
+    public void gameOver()
+    {
+        Label gameOverLabel = new Label("Game Over", 100);
+        addObject(gameOverLabel, 300, 200);
+        
+        // end the game
+        Greenfoot.stop();
+    }
 }
 
 
