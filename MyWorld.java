@@ -8,17 +8,22 @@ import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
  */
 public class MyWorld extends World
 {
-    Background bg1 = new Background("background1.jpg");
+    Background bg1 = new Background("background2.jpg");
     Background bg2 = new Background("background2.jpg");
     private static int speedVertical = 1;
     private static int speedHorizontal = 2; 
     private String[] carImages = {"car1.png","car2.png","car3.png","car4.png","car5.png","car6.png"};
     private int carCounter = 0;
     private int lastYPosition = 0;
-    private static int verticalSpacing = 70;
+    private static int verticalSpacing = 150;
     private static int delay  = 150;
     int hp = 3;
     Label hpLevel = new Label("hp: " + hp, 50);
+    
+    // scoring system
+    private int score = 0;
+    private SimpleTimer scoreTimer;
+    private Label scoreLabel;
     
     /**
      * Constructor for objects of class MyWorld.
@@ -39,6 +44,14 @@ public class MyWorld extends World
         
         Character character = new Character();
         addObject(character, 300, 200);
+        
+        // initialize the socre and the timer
+        scoreLabel = new Label("Score: " + score, 50);
+        addObject(scoreLabel, 100, 50);
+        setPaintOrder(Label.class);
+        scoreTimer = new SimpleTimer();
+        scoreTimer.mark();
+        
     }
     
     public void act()
@@ -50,6 +63,9 @@ public class MyWorld extends World
             carCounter = delay;
         }
         carCounter--;
+        
+        increaseScore();
+        
     }
     
     private void addCar()
@@ -57,8 +73,7 @@ public class MyWorld extends World
         Vehicle car = new Vehicle(speedHorizontal, speedVertical, carImages);
         int yPosition = getNextYPosition();
         
-        // all cars start at the leftmost of the screen
-        addObject(car, 0, yPosition);  
+        addObject(car, 0, yPosition);      
     }
     
     private int getNextYPosition()
@@ -93,7 +108,14 @@ public class MyWorld extends World
         // end the game
         Greenfoot.stop();
     }
+    
+    public void increaseScore()
+    {
+        if(scoreTimer.millisElapsed() >= 5000)
+        {
+            score++;
+            scoreLabel.setValue("Score: " + score);
+            scoreTimer.mark();
+        }
+    }
 }
-
-
-

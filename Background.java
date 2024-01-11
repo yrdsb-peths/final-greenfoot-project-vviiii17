@@ -26,5 +26,12 @@ public class Background extends Actor
             setLocation(getX(), otherBackground.getY() - imageHeight);
         }
     }
+    
+    public int getYPosition()
+    {
+        return getY();
+    }
+    
+    
 }
 
