@@ -22,7 +22,7 @@ public class Vehicle extends Actor
         this.speedHorizontal = speedHorizontal;
         this.speedVertical = speedVertical;
         GreenfootImage img = selectRandomImage(carImages);
-        img.scale(245, 245);
+        img.scale(170, 90);
         setImage(img);
     }
     
@@ -44,12 +44,4 @@ public class Vehicle extends Actor
             setLocation(0, getY());
         }
     }
-
-     
-    
-    
-    
-     
-    
-    
 }
