@@ -1,4 +1,5 @@
 import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
+import java.util.*;
 
 /**
  * Write a description of class MyWorld here.
@@ -8,14 +9,18 @@ import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
  */
 public class MyWorld extends World
 {
-    Background bg1 = new Background("background2.jpg");
-    Background bg2 = new Background("background2.jpg");
+    Background bg1 = new Background("bg1.jpg");
+    Background bg2 = new Background("bg2.jpg");
     private static int speedVertical = 1;
     private static int speedHorizontal = 2; 
     private String[] carImages = {"car1.png","car2.png","car3.png","car4.png","car5.png","car6.png"};
+    private int[] laneFrames = {333, 404, 467, 534, -91, -3, 90, 177}; //mouth-tracked positions of the lanes 
+    private int[] locations_i = {59, 71, 67, 66, 88, 93, 93, 88};
+    private int[] locations = {327, 267, 200, 132, 58, 93, 93, 88};
+    private boolean[] can_spawn = {true, true, true, true, false, false, false, false};
     private int carCounter = 0;
     private int lastYPosition = 0;
-    private static int verticalSpacing = 150;
+    private static int verticalSpacing = 120;
     private static int delay  = 150;
     int hp = 3;
     Label hpLevel = new Label("hp: " + hp, 50);
@@ -56,6 +61,21 @@ public class MyWorld extends World
     
     public void act()
     {
+        for (int i=0; i<8; i++)
+        {
+            locations[i]++;
+            if(locations[i] >= 400)
+            {
+                can_spawn[i] = false;
+            }
+            
+            if(Math.abs(laneFrames[i] - bg2.getY()) <= 3)
+            {
+                can_spawn[i] = true;
+                locations[i] = locations_i[i];
+            }
+                
+        }
         // Add cars periodically
         if(carCounter <= 0)
         {
@@ -72,18 +92,50 @@ public class MyWorld extends World
     {
         Vehicle car = new Vehicle(speedHorizontal, speedVertical, carImages);
         int yPosition = getNextYPosition();
-        
-        addObject(car, 0, yPosition);      
+        if(yPosition != -1)
+        {
+            int offset;
+            if(yPosition <= 3)
+            {
+                offset = 30;
+            }
+            else
+            {
+                offset = 40;
+            }
+            // cars start at the leftmost of the screen
+            addObject(car, 0, locations[yPosition] - offset);  
+        }    
     }
     
     private int getNextYPosition()
     {
-        lastYPosition += verticalSpacing;
-        if(lastYPosition >= getHeight())
+        int count = 0;
+        for (int i = 0; i < can_spawn.length; i++) 
         {
-            lastYPosition = 0;
+            if (can_spawn[i]) 
+            {
+                count++;
+            }
         }
-        return lastYPosition;
+
+        if (count == 0) {
+            return -1;  // Return -1 if no spawn is possible
+        }
+
+    // Create an array to store possible spawn indices
+        int[] spawnIndices = new int[count];
+        int idx = 0;
+        for (int i = 0; i < can_spawn.length; i++) 
+        {
+            if (can_spawn[i]) 
+            {
+                spawnIndices[idx++] = i;
+            }
+        }
+    // Select a random index from spawnIndices
+    int randomIndex = (int) (Math.random() * spawnIndices.length);
+    return spawnIndices[randomIndex];
     }
     
     public void hpDecrease()

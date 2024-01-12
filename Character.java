@@ -71,8 +71,16 @@ public class Character extends Actor
         
         else if(Greenfoot.isKeyDown("up"))
         {
-            setLocation(getX(), getY() - speed);
-            facing = "front";
+            if(getY() >= 1) // make sure the character doesn't go off the top of the screen
+            {
+                setLocation(getX(), getY() - speed);
+                facing = "front"; 
+            }  
+        }
+        
+        else if(Greenfoot.isKeyDown("down"))
+        {
+            setLocation(getX(), getY() + speed); 
         }
         
         // crash on cars
