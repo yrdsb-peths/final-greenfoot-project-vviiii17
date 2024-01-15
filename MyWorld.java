@@ -14,17 +14,14 @@ public class MyWorld extends World
     private static int speedVertical = 1;
     private static int speedHorizontal = 2; 
     private String[] carImages = {"car1.png","car2.png","car3.png","car4.png","car5.png","car6.png"};
-    private int[] laneFrames = {333, 404, 467, 534, -91, -3, 90, 177}; //mouth-tracked positions of the lanes 
+    private int[] laneFrames = {333, 404, 467, 534, -91, -3, 90, 177}; //mouse-tracked positions of the lanes 
     private int[] locations_i = {59, 71, 67, 66, 88, 93, 93, 88};
     private int[] locations = {327, 267, 200, 132, 58, 93, 93, 88};
     private boolean[] can_spawn = {true, true, true, true, false, false, false, false};
     private int carCounter = 0;
     private int lastYPosition = 0;
     private static int verticalSpacing = 120;
-    private static int delay  = 150;
-    int hp = 3;
-    Label hpLevel = new Label("hp: " + hp, 50);
-    
+    private static int delay  = 150;    
     // scoring system
     private int score = 0;
     private SimpleTimer scoreTimer;
@@ -138,17 +135,6 @@ public class MyWorld extends World
     return spawnIndices[randomIndex];
     }
     
-    public void hpDecrease()
-    {
-        hp--;
-        hpLevel.setValue("hp: " + hp);
-        
-        if(hp == 0)
-        {
-            gameOver();
-        }
-    }
-    
     /**
      * End the game and draw 'Game Over'
      */
@@ -168,6 +154,14 @@ public class MyWorld extends World
             score++;
             scoreLabel.setValue("Score: " + score);
             scoreTimer.mark();
+            
+            if (score % 5 == 0) 
+            {
+                speedHorizontal += 1;
+            }
         }
+        
+        // increase speed of the car every 5 scores
+        
     }
 }

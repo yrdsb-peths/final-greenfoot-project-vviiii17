@@ -87,8 +87,9 @@ public class Character extends Actor
         if(isTouching(Vehicle.class))
         {
             MyWorld world = (MyWorld) getWorld();
-            world.hpDecrease();
             carCrashing.play();
+            world.gameOver();
+            
         }
         
         animateCharacter();
