@@ -15,7 +15,7 @@ public class Character extends Actor
     String facing = "front";
     SimpleTimer animationTimer = new SimpleTimer();
     // Speed the charater moves at
-    int speed = 2;
+    int speed = 1;
     int imageIndex = 0;
     
     /**
@@ -92,6 +92,12 @@ public class Character extends Actor
             
         }
         
+        // if the character goes off the bottome edge, game over
+        if (getY() >= getWorld().getHeight()) 
+        {
+            MyWorld world = (MyWorld) getWorld();
+            world.gameOver();
+        }
         animateCharacter();
         
     }

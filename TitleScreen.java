@@ -44,11 +44,15 @@ public class TitleScreen extends World
      */
     private void prepare()
     {
-        Label label = new Label("Use ↑ ↓ → ← to move", 40);
+        Label label = new Label("Use ↑ ↓ → ← to move", 35);
         addObject(label, 200, 257);
-        label.setLocation(293, 300);
-    }
-}
+        label.setLocation(300, 250);
+        
+        Label caution = new Label("Caution: Be care for the perilous bottom edge", 23);
+        addObject(caution, 280, 300);
 
+    }
+
+}
 
 

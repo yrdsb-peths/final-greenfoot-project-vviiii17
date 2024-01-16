@@ -12,7 +12,7 @@ public class MyWorld extends World
     Background bg1 = new Background("bg1.jpg");
     Background bg2 = new Background("bg2.jpg");
     private static int speedVertical = 1;
-    private static int speedHorizontal = 2; 
+    private int speedHorizontal = 2; 
     private String[] carImages = {"car1.png","car2.png","car3.png","car4.png","car5.png","car6.png"};
     private int[] laneFrames = {333, 404, 467, 534, -91, -3, 90, 177}; //mouse-tracked positions of the lanes 
     private int[] locations_i = {59, 71, 67, 66, 88, 93, 93, 88};
@@ -21,7 +21,9 @@ public class MyWorld extends World
     private int carCounter = 0;
     private int lastYPosition = 0;
     private static int verticalSpacing = 120;
-    private static int delay  = 150;    
+    private static int delay  = 150;  
+    GreenfootSound bgm;
+    
     // scoring system
     private int score = 0;
     private SimpleTimer scoreTimer;
@@ -54,6 +56,10 @@ public class MyWorld extends World
         scoreTimer = new SimpleTimer();
         scoreTimer.mark();
         
+        //background music
+        bgm = new GreenfootSound("bgm1.mp3");
+        bgm.playLoop();
+        bgm.setVolume(40);
     }
     
     public void act()
@@ -100,7 +106,6 @@ public class MyWorld extends World
             {
                 offset = 40;
             }
-            // cars start at the leftmost of the screen
             addObject(car, 0, locations[yPosition] - offset);  
         }    
     }
@@ -142,6 +147,7 @@ public class MyWorld extends World
     {
         Label gameOverLabel = new Label("Game Over", 100);
         addObject(gameOverLabel, 300, 200);
+        bgm.stop();
         
         // end the game
         Greenfoot.stop();
@@ -155,13 +161,27 @@ public class MyWorld extends World
             scoreLabel.setValue("Score: " + score);
             scoreTimer.mark();
             
+            // increase speed of the car every 5 scores
             if (score % 5 == 0) 
             {
                 speedHorizontal += 1;
+                updateVehicleSpeed();
             }
         }
         
-        // increase speed of the car every 5 scores
-        
     }
+    
+    /**
+     * make sure that once speed of cars increase, all exsisting cars speed increase
+     */
+    private void updateVehicleSpeed()
+    {
+        List<Vehicle> vehicles = getObjects(Vehicle.class);
+        for(int i = 0; i < vehicles.size(); i++)
+        {
+            Vehicle v = vehicles.get(i);
+            v.setSpeedHorizontal(speedHorizontal);
+        }
+    }
+    
 }
