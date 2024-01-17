@@ -88,7 +88,7 @@ public class Character extends Actor
         {
             MyWorld world = (MyWorld) getWorld();
             carCrashing.play();
-            world.gameOver();
+            world.hpDecrease();
             
         }
         
@@ -99,6 +99,13 @@ public class Character extends Actor
             world.gameOver();
         }
         animateCharacter();
+        
+        if (isTouching(Coin.class))
+        {
+            removeTouching(Coin.class);
+            MyWorld world = (MyWorld) getWorld();
+            world.collectCoin();
+        }
         
     }
     

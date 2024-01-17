@@ -20,14 +20,21 @@ public class MyWorld extends World
     private boolean[] can_spawn = {true, true, true, true, false, false, false, false};
     private int carCounter = 0;
     private int lastYPosition = 0;
-    private static int verticalSpacing = 120;
-    private static int delay  = 150;  
+    private int verticalSpacing = 120;
+    private int delay  = 150;   
     GreenfootSound bgm;
     
     // scoring system
     private int score = 0;
+    private int hp = 1;
     private SimpleTimer scoreTimer;
     private Label scoreLabel;
+    private Label hpLabel;
+    private int maxCoins = 5;
+    private int initialCoins = 3;
+    private Label coinCountLabel;
+    private int currentCoin = 0;
+    private int currentCoinCount = 0;
     
     /**
      * Constructor for objects of class MyWorld.
@@ -47,11 +54,13 @@ public class MyWorld extends World
         bg2.setOtherBackground(bg1);
         
         Character character = new Character();
-        addObject(character, 300, 200);
+        addObject(character, 300, 300);
         
-        // initialize the socre and the timer
-        scoreLabel = new Label("Score: " + score, 50);
+        // initialize the socring system
+        scoreLabel = new Label("Score: " + score, 45);
         addObject(scoreLabel, 100, 50);
+        hpLabel = new Label("hp: " + hp, 45);
+        addObject(hpLabel, 200, 50);
         setPaintOrder(Label.class);
         scoreTimer = new SimpleTimer();
         scoreTimer.mark();
@@ -60,6 +69,11 @@ public class MyWorld extends World
         bgm = new GreenfootSound("bgm1.mp3");
         bgm.playLoop();
         bgm.setVolume(40);
+        
+        // initialize coins
+        coinCountLabel = new Label("Coins: " + currentCoin, 24);
+        addObject(coinCountLabel, 100, 30);
+        addInitialCoins();
     }
     
     public void act()
@@ -125,7 +139,7 @@ public class MyWorld extends World
             return -1;  // Return -1 if no spawn is possible
         }
 
-    // Create an array to store possible spawn indices
+        // Create an array to store possible spawn indices
         int[] spawnIndices = new int[count];
         int idx = 0;
         for (int i = 0; i < can_spawn.length; i++) 
@@ -184,4 +198,59 @@ public class MyWorld extends World
         }
     }
     
+    public void spawnCoin() 
+    {
+        if (currentCoin < maxCoins) 
+        {
+            int x = Greenfoot.getRandomNumber(600);
+            int y = Greenfoot.getRandomNumber(400);
+            addObject(new Coin(), x, y);
+            currentCoin++;
+        }
+    }
+    
+    private void addInitialCoins()
+    {
+        for(int i = 0; i < maxCoins; i++)
+        {
+            currentCoin--;
+            spawnCoin();
+        }
+    }
+    
+    private void hpIncrease()
+    {
+        hp++;
+        hpLabel.setValue("hp: " + hp);
+        
+    }
+    
+    public void hpDecrease()
+    {
+        hp--;
+        hpLabel.setValue("hp: " + hp);
+        if(hp == 0)
+        {
+            gameOver();
+        }
+    }
+    
+    private void updateCoinCount() 
+    {  
+        currentCoin++;
+        coinCountLabel.setValue("Coins: " + currentCoin);
+    }
+    
+    public void collectCoin()
+    {
+        updateCoinCount();
+        spawnCoin();
+        if (currentCoin == 5) 
+        {
+            hpIncrease();
+            currentCoin = 0;
+            coinCountLabel.setValue("Coins: " + currentCoin);
+        }
+        
+    }
 }
