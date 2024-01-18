@@ -9,32 +9,42 @@ import java.util.*;
  */
 public class MyWorld extends World
 {
+    // Background initialization 
     Background bg1 = new Background("bg1.jpg");
     Background bg2 = new Background("bg2.jpg");
+    
+    // Speed for verticle and horizontal movement of the cars
     private static int speedVertical = 1;
     private int speedHorizontal = 2; 
+    
+    // Image for the cars
     private String[] carImages = {"car1.png","car2.png","car3.png","car4.png","car5.png","car6.png"};
+    
+    // Lane positions and spawning settings
     private int[] laneFrames = {333, 404, 467, 534, -91, -3, 90, 177}; //mouse-tracked positions of the lanes 
-    private int[] locations_i = {59, 71, 67, 66, 88, 93, 93, 88};
-    private int[] locations = {327, 267, 200, 132, 58, 93, 93, 88};
+    private int[] locations_i = {59, 71, 67, 66, 88, 93, 93, 88}; // initial position
+    private int[] locations = {327, 267, 200, 132, 58, 93, 93, 88}; // actual position after movement 
     private boolean[] can_spawn = {true, true, true, true, false, false, false, false};
+    
+    // Counters and settings for car spawning
     private int carCounter = 0;
     private int lastYPosition = 0;
     private int verticalSpacing = 120;
     private int delay  = 150;   
+    
+    // Background music
     GreenfootSound bgm;
     
-    // scoring system
+    // Scoring system
     private int score = 0;
-    private int hp = 1;
     private SimpleTimer scoreTimer;
     private Label scoreLabel;
-    private Label hpLabel;
+    private Label coinCountLabel;
     private int maxCoins = 5;
     private int initialCoins = 3;
-    private Label coinCountLabel;
     private int currentCoin = 0;
-    private int currentCoinCount = 0;
+    private int coinCounter = 0;
+    private int coinScore = 0;
     
     /**
      * Constructor for objects of class MyWorld.
@@ -46,38 +56,42 @@ public class MyWorld extends World
         super(600, 400, 1, false);
         Greenfoot.start(); // Start the Greenfoot environment
         Greenfoot.setWorld(new TitleScreen()); // Set TitleScreen as the initial world
+        
+        // Initializes background
         addObject(bg1, getWidth() / 2, bg1.getImage().getHeight() / 2);
         addObject(bg2, getWidth() / 2, bg1.getImage().getHeight() + bg2.getImage().getHeight() / 2);
-        
-        // Set each backrgound to know about the other
         bg1.setOtherBackground(bg2);
         bg2.setOtherBackground(bg1);
         
+        // Initializes characters
         Character character = new Character();
         addObject(character, 300, 300);
         
-        // initialize the socring system
+        // Initialize Socring system
         scoreLabel = new Label("Score: " + score, 45);
         addObject(scoreLabel, 100, 50);
-        hpLabel = new Label("hp: " + hp, 45);
-        addObject(hpLabel, 200, 50);
-        setPaintOrder(Label.class);
+        setPaintOrder(Label.class,Vehicle.class);
         scoreTimer = new SimpleTimer();
         scoreTimer.mark();
         
-        //background music
+        //Initializes Background music
         bgm = new GreenfootSound("bgm1.mp3");
         bgm.playLoop();
         bgm.setVolume(40);
         
-        // initialize coins
-        coinCountLabel = new Label("Coins: " + currentCoin, 24);
-        addObject(coinCountLabel, 100, 30);
+        // Initializes coins system
+        coinCountLabel = new Label("Coins: " + coinScore, 45);
+        addObject(coinCountLabel, 350, 50);
         addInitialCoins();
     }
     
+    /**
+     * called repteatedly to update game states
+     */
+    
     public void act()
     {
+        // Update lane positions based on the scrolling background 
         for (int i=0; i<8; i++)
         {
             locations[i]++;
@@ -93,6 +107,7 @@ public class MyWorld extends World
             }
                 
         }
+        
         // Add cars periodically
         if(carCounter <= 0)
         {
@@ -102,8 +117,11 @@ public class MyWorld extends World
         carCounter--;
         
         increaseScore();
-        
     }
+    
+    /**
+     * Add cars in a random lane
+     */
     
     private void addCar()
     {
@@ -123,6 +141,11 @@ public class MyWorld extends World
             addObject(car, 0, locations[yPosition] - offset);  
         }    
     }
+    
+    /**
+     * Returns the next Y position for a car to sapwn
+     * @return the Y position or -1 if no position is available
+     */
     
     private int getNextYPosition()
     {
@@ -163,9 +186,15 @@ public class MyWorld extends World
         addObject(gameOverLabel, 300, 200);
         bgm.stop();
         
+        GameOver overWorld = new GameOver();
+        Greenfoot.setWorld(overWorld);
         // end the game
-        Greenfoot.stop();
+        //Greenfoot.stop();
     }
+    
+    /**
+     * Increases the score every 5 seconds and updates the car speed every 5 scores earned.
+     */
     
     public void increaseScore()
     {
@@ -180,6 +209,7 @@ public class MyWorld extends World
             {
                 speedHorizontal += 1;
                 updateVehicleSpeed();
+                carCounter = delay;
             }
         }
         
@@ -198,59 +228,53 @@ public class MyWorld extends World
         }
     }
     
+    /**
+     * Spawns a new coin in the world if the current count is below the maximum
+     */
     public void spawnCoin() 
     {
         if (currentCoin < maxCoins) 
         {
             int x = Greenfoot.getRandomNumber(600);
             int y = Greenfoot.getRandomNumber(400);
-            addObject(new Coin(), x, y);
+            addObject(new Coin(speedVertical), x, y);
             currentCoin++;
         }
     }
+    
+    /**
+     * Add the initial sets of the coins
+     */
     
     private void addInitialCoins()
     {
         for(int i = 0; i < maxCoins; i++)
         {
-            currentCoin--;
             spawnCoin();
         }
     }
     
-    private void hpIncrease()
-    {
-        hp++;
-        hpLabel.setValue("hp: " + hp);
-        
-    }
-    
-    public void hpDecrease()
-    {
-        hp--;
-        hpLabel.setValue("hp: " + hp);
-        if(hp == 0)
-        {
-            gameOver();
-        }
-    }
-    
-    private void updateCoinCount() 
-    {  
-        currentCoin++;
-        coinCountLabel.setValue("Coins: " + currentCoin);
-    }
-    
+    /**
+     * 
+     */
+
     public void collectCoin()
     {
-        updateCoinCount();
-        spawnCoin();
-        if (currentCoin == 5) 
+        coinScore++;
+        currentCoin--;
+        coinCountLabel.setValue("Coins: " + coinScore);
+        if (currentCoin % 5 == 0) 
         {
-            hpIncrease();
-            currentCoin = 0;
-            coinCountLabel.setValue("Coins: " + currentCoin);
+            coinCountLabel.setValue("Coins: " + coinScore);
         }
+        spawnCoin();
         
+    }
+    
+    public void removeCoin(Coin coin) 
+    {
+        removeObject(coin);
+        currentCoin--;
+        spawnCoin();
     }
 }

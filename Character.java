@@ -17,6 +17,7 @@ public class Character extends Actor
     // Speed the charater moves at
     int speed = 1;
     int imageIndex = 0;
+    private boolean justHit = false;
     
     /**
      * Constructor - The code that gets run on time when object is created
@@ -84,12 +85,16 @@ public class Character extends Actor
         }
         
         // crash on cars
-        if(isTouching(Vehicle.class))
+        if(isTouching(Vehicle.class) && !justHit) 
         {
             MyWorld world = (MyWorld) getWorld();
             carCrashing.play();
-            world.hpDecrease();
-            
+            world.gameOver();
+            justHit = true;
+        } 
+        else if (!isTouching(Vehicle.class)) 
+        {
+            justHit = false;
         }
         
         // if the character goes off the bottome edge, game over
