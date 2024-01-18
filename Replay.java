@@ -1,15 +1,19 @@
 import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
 
 /**
- * Write a description of class Replay here.
+ * Class Replay represents the replay button displays in the gameOver class
+ * Press it in order to replay the game
  * 
- * @author (your name) 
- * @version (a version number or a date)
+ * @author Yuvia Liu 
+ * @version Janurary 2024
  */
 public class Replay extends Actor
 {
     private GreenfootImage replay;
     
+    /**
+     * Constuctor - Initializes the replay button image
+     */
     public Replay()
     {
         replay = new GreenfootImage("replay.png");
@@ -23,11 +27,13 @@ public class Replay extends Actor
      */
     public void act()
     {
+        // A press animation
         if(Greenfoot.mousePressed(this))
         {
             getImage().scale((int)Math.round(getImage().getWidth() + 0.9), (int)Math.round(getImage().getHeight()*0.9));
         }
         
+        // Press to restart the game
         if(Greenfoot.mouseClicked(this))
         {
             MyWorld gameWorld = new MyWorld();

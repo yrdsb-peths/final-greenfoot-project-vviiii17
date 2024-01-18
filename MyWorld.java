@@ -2,7 +2,10 @@ import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
 import java.util.*;
 
 /**
- * Write a description of class MyWorld here.
+ * The MyWorld is the main program of the game, and represent the gameworld
+ * It creates a crossy road game that players need to dodge the moving cars.
+ * It handles the spawning of cars and coins,managing the score and game over state,
+ * and initializing the game environment.
  * 
  * @author Yuvia Liu
  * @version December 2023
@@ -255,7 +258,7 @@ public class MyWorld extends World
     }
     
     /**
-     * 
+     * Collects coin and updates the coin score and coin count
      */
 
     public void collectCoin()
@@ -271,6 +274,10 @@ public class MyWorld extends World
         
     }
     
+    /**
+     * Removes a coin from the world and decrease the current coin count
+     * @param coin the coin to be removed
+     */
     public void removeCoin(Coin coin) 
     {
         removeObject(coin);

@@ -2,15 +2,20 @@ import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
 import greenfoot.GreenfootImage;
 
 /**
- * Write a description of class coin here.
+ * Coin class represents the coin in the game that character get to collect
  * 
- * @author (your name) 
- * @version (a version number or a date)
+ * @author Yuvia Liu
+ * @version Janurary 2024
  */
 public class Coin extends Actor
 {
     private int vertical;
     
+    /**
+     * Constructor - The code that gets run on time when object is created
+     * 
+     * @param vertical The vertical speed of the coin.
+     */
     public Coin(int vertical)
     {
         this.vertical = vertical;
@@ -25,7 +30,8 @@ public class Coin extends Actor
      */
     public void act()
     {
-        setLocation(getX(), getY() + vertical);
+        // Check if the coin goes off the bottom of the screen
+        setLocation(getX(), getY() + vertical); 
         if (getY() > getWorld().getHeight() && getWorld() != null) 
         {
             ((MyWorld)getWorld()).removeCoin(this);

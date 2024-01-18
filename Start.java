@@ -1,15 +1,19 @@
 import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
 
 /**
- * Write a description of class Start here.
+ * Start class represents the button on the TitleScreen 
+ * Press it to start the game
  * 
- * @author (your name) 
- * @version (a version number or a date)
+ * @author Yuvia Liu
+ * @version Janurary 2024
  */
 public class Start extends Actor
 {
     private GreenfootImage start;
     
+    /**
+     * Consturctor - Initializes the start button image.
+     */
     public Start()
     {
         start = new GreenfootImage("start.png");
@@ -23,11 +27,13 @@ public class Start extends Actor
      */
     public void act()
     {
+        // Pressing animation
         if(Greenfoot.mousePressed(this))
         {
             getImage().scale((int)Math.round(getImage().getWidth() + 0.9), (int)Math.round(getImage().getHeight()*0.9));
         }
         
+        // Set the world to game world if it got pressed.
         if(Greenfoot.mouseClicked(this))
         {
             MyWorld gameWorld = new MyWorld();

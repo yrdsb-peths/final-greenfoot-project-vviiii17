@@ -1,19 +1,22 @@
 import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
 
 /**
- * Write a description of class Character here.
+ * The Character class represents the player's character in the game.
+ * It handles animation, movement and intractions with game plays (other classes)
  * 
  * @author Yuvia 
  * @version January 2024
  */
 public class Character extends Actor
 {
+    // Arrays for front-facing images animations
     GreenfootImage[] idleFront = new GreenfootImage[3];
     GreenfootSound carCrashing = new GreenfootSound("crashing.mp3");
     
     // Direction the character is facing
     String facing = "front";
     SimpleTimer animationTimer = new SimpleTimer();
+    
     // Speed the charater moves at
     int speed = 1;
     int imageIndex = 0;
@@ -36,11 +39,16 @@ public class Character extends Actor
         setImage(idleFront[0]);
     }
     
+    /**
+     * Animate the character based on current facing direction
+     */
+    
     public void animateCharacter()
     {
         if(animationTimer.millisElapsed() < 100)
         {
-            return;
+            // Control the animation speed
+            return; 
         }
         animationTimer.mark();
         
@@ -103,8 +111,9 @@ public class Character extends Actor
             MyWorld world = (MyWorld) getWorld();
             world.gameOver();
         }
-        animateCharacter();
+        animateCharacter(); // Update character animation
         
+        // collection of coins
         if (isTouching(Coin.class))
         {
             removeTouching(Coin.class);
