@@ -1,22 +1,26 @@
 import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
 
 /**
- * Write a description of class Character here.
+ * The Character class represents the player's character in the game.
+ * It handles animation, movement and intractions with game plays (other classes)
  * 
  * @author Yuvia 
  * @version January 2024
  */
 public class Character extends Actor
 {
+    // Arrays for front-facing images animations
     GreenfootImage[] idleFront = new GreenfootImage[3];
     GreenfootSound carCrashing = new GreenfootSound("crashing.mp3");
     
     // Direction the character is facing
     String facing = "front";
     SimpleTimer animationTimer = new SimpleTimer();
+    
     // Speed the charater moves at
-    int speed = 2;
+    int speed = 1;
     int imageIndex = 0;
+    private boolean justHit = false;
     
     /**
      * Constructor - The code that gets run on time when object is created
@@ -35,11 +39,16 @@ public class Character extends Actor
         setImage(idleFront[0]);
     }
     
+    /**
+     * Animate the character based on current facing direction
+     */
+    
     public void animateCharacter()
     {
         if(animationTimer.millisElapsed() < 100)
         {
-            return;
+            // Control the animation speed
+            return; 
         }
         animationTimer.mark();
         
@@ -84,14 +93,33 @@ public class Character extends Actor
         }
         
         // crash on cars
-        if(isTouching(Vehicle.class))
+        if(isTouching(Vehicle.class) && !justHit) 
         {
             MyWorld world = (MyWorld) getWorld();
-            world.hpDecrease();
             carCrashing.play();
+            world.gameOver();
+            justHit = true;
+        } 
+        else if (!isTouching(Vehicle.class)) 
+        {
+            justHit = false;
         }
         
-        animateCharacter();
+        // if the character goes off the bottome edge, game over
+        if (getY() >= getWorld().getHeight()) 
+        {
+            MyWorld world = (MyWorld) getWorld();
+            world.gameOver();
+        }
+        animateCharacter(); // Update character animation
+        
+        // collection of coins
+        if (isTouching(Coin.class))
+        {
+            removeTouching(Coin.class);
+            MyWorld world = (MyWorld) getWorld();
+            world.collectCoin();
+        }
         
     }
     
