@@ -33,7 +33,7 @@ public class MyWorld extends World
     private int carCounter = 0;
     private int lastYPosition = 0;
     private int verticalSpacing = 120;
-    private int delay  = 150;   
+    private int delay  = 130;   
     
     // Background music
     GreenfootSound bgm;
@@ -214,6 +214,7 @@ public class MyWorld extends World
                 updateVehicleSpeed();
                 carCounter = delay;
             }
+            
         }
         
     }

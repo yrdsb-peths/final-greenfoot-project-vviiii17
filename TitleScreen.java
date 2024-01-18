@@ -51,7 +51,7 @@ public class TitleScreen extends World
         addObject(caution, 295, 270);
         
         // initialize label instruction3
-        Label caution2 = new Label("DO NOT venture beneath it!!", 27); 
+        Label caution2 = new Label("DO NOT venture beneath it! Don't forget to collect the coins:)", 22); 
         caution2.setFillColor(new Color(242, 44, 70));
         caution2.setLineColor(new Color(0,0,0));
         addObject(caution2, 310, 310);
